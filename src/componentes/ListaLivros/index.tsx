@@ -6,7 +6,7 @@ import CardLivro from '../CardLivro';
 import './ListaLivros.css';
 import { AbBotao, AbCampoTexto } from 'ds-alurabooks';
 import { useLivros } from '../../graphql/livros/hooks';
-import { livrosVar } from '../../graphql/livros/state';
+import { filtroLivrosVar, livrosVar } from '../../graphql/livros/state';
 
 interface ListaLivrosProps {
   categoria: ICategoria;
@@ -15,27 +15,17 @@ interface ListaLivrosProps {
 const ListaLivros = ({ categoria }: ListaLivrosProps) => {
   const [textoBusca, setTextoBusca] = useState('');
 
+  filtroLivrosVar({
+    categoria,
+  });
+
   const livros = useReactiveVar(livrosVar);
-  console.log('livros =>', livros);
 
-  useLivros(categoria);
+  useLivros();
 
-  const buscarLivros = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (textoBusca) {
-      // refetch({
-      //   categoriaId: categoria.id,
-      //   titulo: textoBusca,
-      // });
-    }
-  };
-  // const { data: produtos } = useQuery(['buscaLivrosPorCategoria', categoria], () => obterProdutosDaCategoria(categoria))
   return (
     <section>
-      <form
-        onSubmit={buscarLivros}
-        style={{ maxWidth: '80%', margin: '0 auto', textAlign: 'center' }}
-      >
+      <form style={{ maxWidth: '80%', margin: '0 auto', textAlign: 'center' }}>
         <AbCampoTexto
           value={textoBusca}
           onChange={setTextoBusca}
